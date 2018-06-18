@@ -6,11 +6,11 @@ class TrainingRoom extends Room {
     super();
 
 	this.playerSpawnPoints = [
-		[-3, 0, 2.5], [3, 0, 2.5]
+		{x: -3.0, y: 0.0, z: 2.5}, {x: 3.0, y: 0.0, z: 2.5}
 	];
 	this.prevPlayerSpawnInd = -1;
 	this.enemySpawnPoints = [
-		[-3, 0, -2.5], [3, 0, -2.5], [0, 0, -2.5]
+		[-3.0, 0.0, -2.5], [3.0, 0.0, -2.5], [0.0, 0.0, -2.5]
 	];
 	this.prevEnemySpawnInd = -1;
 	
@@ -34,7 +34,12 @@ class TrainingRoom extends Room {
 
   onJoin (client) {
     console.log("client joined!", client.sessionId);
-    this.state.players[client.sessionId] = { x: 0, y: 0 };
+	let spawnPointInd = this.prevPlayerSpawnInd + 1;
+	if (spawnPointInd >= this.playerSpawnPoints.length) {
+		spawnPointInd = 0;
+	}
+	this.prevPlayerSpawnInd = spawnPointInd;
+    this.state.players[client.sessionId] = this.playerSpawnPoints[spawnPointInd];
   }
 
   onLeave (client) {
@@ -50,9 +55,10 @@ class TrainingRoom extends Room {
   }
 
   update () {
-    console.log("num clients:", Object.keys(this.clients).length);
+    //console.log("num clients:", Object.keys(this.clients).length);
     for (var sessionId in this.state.players) {
-      this.state.players[sessionId].x += 0.0001;
+		console.log(sessionId + " x: " + this.state.players[sessionId].x);
+		this.state.players[sessionId].x += 0.01;
     }
   }
 
