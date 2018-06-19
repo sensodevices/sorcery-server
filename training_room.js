@@ -69,7 +69,7 @@ class TrainingRoom extends Room {
 		data.clientId = client.id;
 		for (var ind in this.clients)
 		{
-			//if (this.clients[ind].id != client.id)
+			if (this.clients[ind].id != client.id)
 			{
 				this.send(this.clients[ind], data);
 			}
